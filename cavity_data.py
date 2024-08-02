@@ -1,5 +1,5 @@
 #                  rc,  Σc, rcg,   δg,      Mdot,     M*  Age,   Md,   L*,  rcd,  δd
-target = {
+all_target = {
     'SR21'      :[ 15,  400, 25,  1e-2,  10**(-7.9),   2, 1.5,  1900,   11,  56, 1e-3], # spectroscopic binary/substellar companion
     'HD135344B' :[ 25,  120, 20,  2e-4,  10**(-7.4), 1.6, 5.7,  4900,  6.7,  52, 2e-4],
     'LkCa15'    :[ 85,   34, 45,  1e-1,  10**(-8.4), 0.8, 1.5,  3300,  1.3,  76, 1e-4], # substellar companion
@@ -22,45 +22,51 @@ target = {
     'DMTau'     :[124, 0.65, 21,  0.15,  10**(-8.3), 0.3, 1.5,  2000,  0.2,  18, 6e-9]  # tentative binary/substellar companion
 }
 
-cavity_rc       = []    # AU
-cavity_sigmac   = []    # gcm-2
-cavity_rcavg    = []    # AU
-cavity_deltag   = []    # 
-cavity_mdot     = []    # M_sun/yr
-cavity_mstar    = []    # M_sun
-cavity_age      = []    # Myr
-cavity_md       = []    # M_earth
-cavity_lum      = []    # L_sun
-cavity_rcavd    = []    # AU
-cavity_deltad   = []    # 
+with_companion     = ['SR21','LkCa15','RXJ1615','DoAr44','RYLup','HD142527','DMTau']
+without_companion = [key for key in all_target.keys() if key not in with_companion]
 
-for t in target:
-    cavity_rc.append(target[t][0])
-    cavity_sigmac.append(target[t][1])
-    cavity_rcavg.append(target[t][2])
-    cavity_deltag.append(target[t][3])
-    cavity_mdot.append(target[t][4])
-    cavity_mstar.append(target[t][5])
-    cavity_age.append(target[t][6])
-    cavity_md.append(target[t][7])
-    cavity_lum.append(target[t][8])
-    cavity_rcavd.append(target[t][9])
-    cavity_deltad.append(target[t][10])
+def make_cavity(target = with_companion + without_companion):
+    
+    cavity_rc        = []    # AU
+    cavity_sigmac    = []    # gcm-2
+    cavity_rcavg     = []    # AU
+    cavity_deltag    = []    # 
+    cavity_mdot      = []    # M_sun/yr
+    cavity_mstar     = []    # M_sun
+    cavity_age       = []    # Myr
+    cavity_md        = []    # M_earth
+    cavity_lum       = []    # L_sun
+    cavity_rcavd     = []    # AU
+    cavity_deltad    = []    # 
 
-cavity = {
-    'name'   : list(target.keys()),
-    'Mdot'   : cavity_mdot,
-    'rc'     : cavity_rc,
-    'sigmac' : cavity_sigmac,
-    'rcavg'  : cavity_rcavg,
-    'rcavd'  : cavity_rcavd,
-    'deltag' : cavity_deltag,
-    'deltad' : cavity_deltad,
-    'Mstar'  : cavity_mstar,
-    'age'    : cavity_age,
-    'Md'     : cavity_md,
-    'Lstar'  : cavity_lum,
-}
+    for t in target:
+        cavity_rc.append(all_target[t][0])
+        cavity_sigmac.append(all_target[t][1])
+        cavity_rcavg.append(all_target[t][2])
+        cavity_deltag.append(all_target[t][3])
+        cavity_mdot.append(all_target[t][4])
+        cavity_mstar.append(all_target[t][5])
+        cavity_age.append(all_target[t][6])
+        cavity_md.append(all_target[t][7])
+        cavity_lum.append(all_target[t][8])
+        cavity_rcavd.append(all_target[t][9])
+        cavity_deltad.append(all_target[t][10])
+
+    cavity = {
+        'name'      : target,
+        'Mdot'      : cavity_mdot,
+        'rc'        : cavity_rc,
+        'sigmac'    : cavity_sigmac,
+        'rcavg'     : cavity_rcavg,
+        'rcavd'     : cavity_rcavd,
+        'deltag'    : cavity_deltag,
+        'deltad'    : cavity_deltad,
+        'Mstar'     : cavity_mstar,
+        'age'       : cavity_age,
+        'Md'        : cavity_md,
+        'Lstar'     : cavity_lum,
+    }
+    return cavity
 
 key_to_text = {
     'Mdot'   : r'$\dot{M}$',
@@ -75,3 +81,4 @@ key_to_text = {
     'Md'     : r'$M_{d}$',
     'Lstar'  : r'$L_{*}$',
 }
+
