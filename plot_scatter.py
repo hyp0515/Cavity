@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 import corner
 
 from itertools import combinations
-from cavity_data import make_cavity, key_to_text, with_companion, without_companion
+from cavity_data import *
 ###################################################################################################
 def plot_scatter(cavity_dict, fname='scatter.pdf'):
     df = pd.DataFrame(cavity_dict)
@@ -14,8 +14,9 @@ def plot_scatter(cavity_dict, fname='scatter.pdf'):
     params.remove('name')
     params.remove('rc')
     params.remove('sigmac')
-    # params.remove('age')
-    # params.remove('deltad')
+    params.remove('age')
+    params.remove('existence')
+    params.remove('companion')
 
     param_combinations = list(combinations(params, 2))
     num_combinations = len(param_combinations)
@@ -35,16 +36,24 @@ def plot_scatter(cavity_dict, fname='scatter.pdf'):
 
     for i, (param1, param2) in enumerate(param_combinations):
         ax = axes[i]
-        # color_value = np.array(df['Mdot'])/np.array(df['Md']/333000)
-        color_value = np.array(df['Mdot'])/np.array(df['Mstar'])
-        # color_value = np.array(df['deltag'])/np.array(df['deltad'])
-        # color_value = df['Mdot']
-        scatter = ax.scatter(df[param1], df[param2], s=125, c=np.log10(color_value), cmap='rainbow')
         
-        parameters, covariance = curve_fit(linear_model, np.log10(df[param1]), np.log10(df[param2]))
-        a, b = parameters
-        fitted_line = linear_model(np.log10(df[param1]), a, b)
-        ax.plot(df[param1], 10**(fitted_line))
+        color_value = df['age']/(df['age']+(df['Md']/(df['Mdot']*333000)/1e6))
+        
+        marker_dict = {
+            (True, False)  : 'o',
+            (True, True)   : '^',
+            (False, False) : 'x'
+        }
+        for j in range(len(df['name'])):
+            status = (df['existence'][j], df['companion'][j])
+            scatter = ax.scatter(df[param1][j], df[param2][j], s=150, c=color_value[j],
+                                cmap='rainbow', marker = marker_dict[status],
+                                vmin=color_value.min(), vmax=color_value.max())
+        
+        # parameters, covariance = curve_fit(linear_model, np.log10(df[param1]), np.log10(df[param2]))
+        # a, b = parameters
+        # fitted_line = linear_model(np.log10(df[param1]), a, b)
+        # ax.plot(df[param1], 10**(fitted_line))
         
         ax.set_xlabel(key_to_text[param1], fontsize=25)
         ax.set_ylabel(key_to_text[param2], fontsize=25)
@@ -58,7 +67,7 @@ def plot_scatter(cavity_dict, fname='scatter.pdf'):
 
     cbar_ax = fig.add_axes([0.95, 0.05, 0.01, 0.9])
     cbar = fig.colorbar(scatter, cax=cbar_ax, orientation='vertical')
-    cbar.set_label(r'Log($\dot{M}/M_{*}$)', fontsize=30)
+    cbar.set_label('Proportion of life', fontsize=30)
     cbar.ax.tick_params(labelsize=20)
     
     fig.tight_layout(rect=[0, 0, 0.95, 1])
@@ -85,15 +94,10 @@ def plot_corner(cavity_dict, fname='corner.pdf'):
     plt.close()
 
 ###################################################################################################
-cavity = make_cavity()
+# cavity = make_dict(target=with_companion+without_companion)
+cavity = make_dict(target=with_cav+without_cav)
 plot_scatter(cavity_dict=cavity, fname='scatter_raw.pdf')
-plot_corner(cavity_dict=cavity, fname='corner_raw.pdf')
 
-cavity = make_cavity(target=with_companion)
-plot_scatter(cavity_dict=cavity, fname='scatter_companion.pdf')
-plot_corner(cavity_dict=cavity, fname='corner_companion.pdf')
 
-cavity = make_cavity(target=without_companion)
-plot_scatter(cavity_dict=cavity, fname='scatter_nocompanion.pdf')
-plot_corner(cavity_dict=cavity, fname='corner_nocompanion.pdf')
+
 

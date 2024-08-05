@@ -1,21 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from cavity_data import cavity
 
-au   = 1.496e13
-SB   = 5.6704e-5
-mp   = 1.6726e-24
-kB   = 1.3807e-16
-Msun = 1.9884e33
-Lsun = 3.828e33
-G    = 6.6743e-8
-yr   = 3.156e7
+from cavity_data import *
+
+cavity = make_dict(target=with_cav+without_cav)
+
 
 r_grid = np.logspace(np.log10(0.1), np.log10(200), 1000)
 
 
 def surface_density(rc, sigmac, delta_gas, rcav, gamma = 1):
+    if delta_gas is None and rcav is None:
+        delta_gas, rcav = 1, 0
     density = np.where(
         r_grid < rcav,
         delta_gas * sigmac * ((r_grid/rc)**(-gamma)) * np.exp(-(r_grid/rc)**(2-gamma)),
@@ -38,9 +35,7 @@ Lstar_list  = cavity['Lstar']
 Mstar_list  = cavity['Mstar']
 Mdot_list   = cavity['Mdot']
 
-
-
-fig, ax = plt.subplots(5, 4, figsize=(20, 20), sharex=True, sharey=True)
+fig, ax = plt.subplots(7, 4, figsize=(20, 30), sharex=True, sharey=True)
 ax = ax.flatten()
 
 for i in range(len(rc_list)):
@@ -72,7 +67,7 @@ for i in range(len(rc_list)):
     ax[i].set_ylim((1e-6, 1e6))
     ax[i].set_xscale('log')
     ax[i].set_yscale('log')
-    if i == 16:
+    if i == 24:
         ax[i].set_xlabel('R [AU]', fontsize = 16)
         ax[i].set_ylabel(r'$\Sigma_{g} [g cm^{-2}]$', fontsize = 16)
     ax[i].legend(fontsize = 16)
