@@ -34,29 +34,17 @@ rcavg_list  = cavity['rcavg']
 Lstar_list  = cavity['Lstar']
 Mstar_list  = cavity['Mstar']
 Mdot_list   = cavity['Mdot']
+gamma_list  = cavity['gamma']
 
 fig, ax = plt.subplots(7, 4, figsize=(20, 30), sharex=True, sharey=True)
 ax = ax.flatten()
 
 for i in range(len(rc_list)):
-    if i == 5:
-        sigma = surface_density(rc = rc_list[i],
-                                sigmac=sigmac_list[i],
-                                delta_gas=deltag_list[i],
-                                rcav=rcavg_list[i],
-                                gamma=0.3)
-    elif i == 16:
-        sigma = surface_density(rc = rc_list[i],
-                                sigmac=sigmac_list[i],
-                                delta_gas=deltag_list[i],
-                                rcav=rcavg_list[i],
-                                gamma=1.1)
-    else:
-        sigma = surface_density(rc = rc_list[i],
-                                sigmac=sigmac_list[i],
-                                delta_gas=deltag_list[i],
-                                rcav=rcavg_list[i],
-                                gamma=1)
+    sigma = surface_density(rc = rc_list[i],
+                            sigmac=sigmac_list[i],
+                            delta_gas=deltag_list[i],
+                            rcav=rcavg_list[i],
+                            gamma=gamma_list[i])
     sigma_vis = surface_density_viscous(Lstar=Lstar_list[i],
                                         Mstar=Mstar_list[i],
                                         Mdot=Mdot_list[i])

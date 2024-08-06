@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 import pandas as pd
 from scipy.optimize import curve_fit
 import corner
@@ -17,7 +18,11 @@ def plot_scatter(cavity_dict, fname='scatter.pdf'):
     params.remove('age')
     params.remove('existence')
     params.remove('companion')
-
+    params.remove('rcavd')
+    params.remove('deltad')
+    params.remove('gamma')
+    
+    
     param_combinations = list(combinations(params, 2))
     num_combinations = len(param_combinations)
 
@@ -70,6 +75,12 @@ def plot_scatter(cavity_dict, fname='scatter.pdf'):
     cbar.set_label('Proportion of life', fontsize=30)
     cbar.ax.tick_params(labelsize=20)
     
+    legend_elements = [
+        mlines.Line2D([], [], color='black', marker='o', linestyle='None', markersize=10, label='w/ cav + w/o companion'),
+        mlines.Line2D([], [], color='black', marker='^', linestyle='None', markersize=10, label='w/ cav + w/ companion'),
+        mlines.Line2D([], [], color='black', marker='x', linestyle='None', markersize=10, label='Full disks')
+    ]
+    fig.legend(handles=legend_elements, loc='upper right', fontsize=20)
     fig.tight_layout(rect=[0, 0, 0.95, 1])
     
     plt.savefig(fname, transparent = True)
@@ -97,7 +108,4 @@ def plot_corner(cavity_dict, fname='corner.pdf'):
 # cavity = make_dict(target=with_companion+without_companion)
 cavity = make_dict(target=with_cav+without_cav)
 plot_scatter(cavity_dict=cavity, fname='scatter_raw.pdf')
-
-
-
 
