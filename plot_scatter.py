@@ -109,3 +109,9 @@ def plot_corner(cavity_dict, fname='corner.pdf'):
 cavity = make_dict(target=with_cav+without_cav)
 plot_scatter(cavity_dict=cavity, fname='scatter_raw.pdf')
 
+cavity = make_dict(target=with_companion)
+plot_scatter(cavity_dict=cavity, fname='scatter_companion.pdf')
+
+cavity = make_dict(target=without_companion)
+plot_scatter(cavity_dict=cavity, fname='scatter_nocompanion.pdf')
+

@@ -4,7 +4,7 @@ SB   = 5.6704e-5    # g/s^3/K^4
 mp   = 1.6726e-24   # g/mp
 kB   = 1.3807e-16   # cm^2 g/s^2/K
 Msun = 1.9884e33    # g/Msun
-Lsun = 3.828e33     # erg/s
+Lsun = 3.839e33     # erg/s
 G    = 6.6743e-8    # cm^3/g/s^2
 yr   = 3.156e7      # s/yr
 
@@ -27,8 +27,8 @@ all_target = {
     'Sz118'     :[ 25,  100,   40,  1e-3,  10**(-9.2),   1,  2.5,    700,  0.7,   64,  1e-1, 1.0],
     'Sz123A'    :[ 25,   36,   30,  1e-3,  10**(-9.2), 0.6,  2.5,    400,  0.1,   39,  1e-2, 1.0],
     'HD100546'  :[ 30,  250,   15,  1e-5,    10**(-7), 2.2,  5.5,   4800,   25,   25, 1e-10, 1.1],
+    # 'HD139614'  :[  6, 0.17,    6,  1e-2,    10**(-8), 1.8,  8.8,   3330,   11,    6,  1e-4, 1.0],
     'HD142527'  :[200,   22,   90,  2e-2,  10**(-7.5), 2.3,  6.6,  30600,  9.9,  185,  3e-5, 1.0], # binary
-    'HD139614'  :[  6, 0.17,    6,  1e-2,    10**(-8), 1.8,  8.8,   3330,   11,    6,  1e-4, 1.0],
     'DMTau'     :[124, 0.65,   21,  0.15,  10**(-8.3), 0.3,  1.5,   2000,  0.2,   18,  6e-9, 1.0], # tentative binary/substellar companion
     'IMLup'     :[100, 28.4, None,  None,  10**(-7.9), 1.1,  2.5,  66600, 2.57, None,  None, 1.0],
     'GMAur'     :[176,  9.4, None,  None,  10**(-8.1), 1.1,  1.5,  66600,    1, None,  None, 1.0],
@@ -40,7 +40,7 @@ all_target = {
 without_cav       = [key for key in all_target.keys() if all_target[key][9] is None]
 with_cav          = [key for key in all_target.keys() if all_target[key][9] is not None]
 with_companion    = ['SR21','LkCa15','RXJ1615','DoAr44','HD142527','DMTau']
-without_companion = [key for key in with_cav if key not in with_companion]
+without_companion = [key for key in all_target.keys() if key not in with_companion]
 
 
 def alpha(Mstar, Mdot, Sigma):
@@ -125,7 +125,7 @@ def make_dict(target = with_companion + without_companion):
                         )
                   )
             )
-        
+
     cavity = {
         'name'      : target,
         'Mdot'      : cavity_mdot,
