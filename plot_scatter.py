@@ -22,8 +22,9 @@ def plot_all_scatter(cavity_dict, fname='scatter.pdf'):
     params.remove('deltad')
     params.remove('gamma')
     params.remove('psi')
-    # params.remove('vr')
+    params.remove('vr')
     params.remove('hc')
+    params.remove('td')
     
     param_combinations = list(combinations(params, 2))
     num_combinations = len(param_combinations)

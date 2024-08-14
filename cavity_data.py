@@ -44,7 +44,7 @@ without_companion = [key for key in all_target.keys() if key not in with_compani
 
 
 def alpha_1au(psi, Lstar, Mstar, Mdot, Sigma):
-    T_disk = (psi*Lstar*Lsun/(8*np.pi*SB*au**2))**(1/4)
+    T_disk = (psi*Lstar*Lsun/(8*np.pi*SB*(au**2)))**(1/4)
     a = Mdot*(Msun/yr)*2.3*mp*np.sqrt(G*Mstar*Msun/(au**3))/(3*np.pi*Sigma*kB*T_disk)
     return a
 
@@ -59,7 +59,16 @@ def sigma_at_1au(rc, sigmac, delta_gas, rcav, gamma = 1):
     density = delta_gas * sigmac * ((1/rc)**(-gamma)) * np.exp(-(1/rc)**(2-gamma))
     return density
 
+def H_at_1au(rc, hc, psi):
+    return hc*((1/rc)**psi)*au
 
+def Bz2_at_1au(Mstar, Sigma, H):
+    Omega = np.sqrt(G*Mstar*Msun/(au**3))
+    return 4*np.sqrt(2*np.pi)*H*(Omega**2)*Sigma
+
+def BzBphi_at_1au(Mdot, Mstar):
+    Omega = np.sqrt(G*Mstar*Msun/(au**3))
+    return Mdot*(Msun/yr)*Omega/(2*au)
 
 def make_dict(target = with_cav + without_cav):
     
@@ -82,6 +91,8 @@ def make_dict(target = with_cav + without_cav):
     cavity_psi       = []    #
     cavity_disk_life = []    # yr
     cavity_hc        = []
+    cavity_bz2       = []    # G^2
+    cavity_bzbphi    = []    # G^2
     
     for t in target:
         cavity_rc.append(all_target[t][0])
@@ -134,6 +145,38 @@ def make_dict(target = with_cav + without_cav):
                                   )
                      )
             )
+        if t in without_cav:
+            H = H_at_1au(rc=100,
+                         hc=all_target[t][13],
+                         psi=all_target[t][12])
+            cavity_bz2.append(Bz2_at_1au(
+                Mstar = all_target[t][5],
+                Sigma = sigma_at_1au(
+                            all_target[t][0],
+                            all_target[t][1],
+                            all_target[t][3],
+                            all_target[t][2],
+                            all_target[t][11]
+                               ),
+                H=H
+            ))
+        else:
+            H = H_at_1au(rc=all_target[t][0],
+                         hc=all_target[t][13],
+                         psi=all_target[t][12])
+            cavity_bz2.append(Bz2_at_1au(
+                Mstar = all_target[t][5],
+                Sigma = sigma_at_1au(
+                            all_target[t][0],
+                            all_target[t][1],
+                            all_target[t][3],
+                            all_target[t][2],
+                            all_target[t][11]
+                               ),
+                H=H
+            ))
+        cavity_bzbphi.append(BzBphi_at_1au(Mdot=all_target[t][4],
+                                           Mstar=all_target[t][5]))
         
         
     cavity = {
@@ -156,7 +199,9 @@ def make_dict(target = with_cav + without_cav):
         'gamma'     : cavity_gamma,
         'psi'       : cavity_psi,
         'td'        : cavity_disk_life,
-        'hc'        : cavity_hc
+        'hc'        : cavity_hc,
+        'bz2'       : cavity_bz2,
+        'bzbphi'    : cavity_bzbphi
     }
     return cavity
 
@@ -176,7 +221,9 @@ key_to_text = {
     'alpha'  : r'$\alpha_{@1AU}$',
     'gamma'  : r'$\gamma$',
     'psi'    : r'$\psi$',
-    'td'     : r'$t_{d}$'
+    'td'     : r'$t_{d}$',
+    'bz2'    : r'$B_{z}^{2}$',
+    'bzbphi' : r'$B_{z}B_{\phi}$'
 }
 
 key_to_unit = {
@@ -195,6 +242,8 @@ key_to_unit = {
     'alpha'  : '',
     'gamma'  : '',
     'psi'    : '',
-    'td'     : r'$[Myr]$'
+    'td'     : r'$[Myr]$',
+    'bz2'    : r'$[G^2]$',
+    'bzbphi' : r'$[G^2]$'
 }
 

@@ -68,138 +68,138 @@ hc_list     = cavity['hc']
 
 ###############################################################################
 # T plot
-# fig, ax = plt.subplots(6, 4, figsize=(25, 30), sharex=True, sharey=True)
+fig, ax = plt.subplots(6, 4, figsize=(25, 30), sharex=True, sharey=True)
 
-# ax = ax.flatten()
+ax = ax.flatten()
 
-# for i in range(len(rc_list)):
-#     sigma = surface_density(rc = rc_list[i],
-#                             sigmac=sigmac_list[i],
-#                             delta_gas=deltag_list[i],
-#                             rcav=rcavg_list[i],
-#                             gamma=gamma_list[i])
+for i in range(len(rc_list)):
+    sigma = surface_density(rc = rc_list[i],
+                            sigmac=sigmac_list[i],
+                            delta_gas=deltag_list[i],
+                            rcav=rcavg_list[i],
+                            gamma=gamma_list[i])
     
-#     T = temperature(psi=psi_list[i],
-#                     Lstar=Lstar_list[i])
+    T = temperature(psi=psi_list[i],
+                    Lstar=Lstar_list[i])
     
-#     _, v = vr_profile(Mstar=Mstar_list[i],
-#                       Mdot=Mdot_list[i],
-#                       Sigma=sigma,
-#                       T=T)
+    _, v = vr_profile(Mstar=Mstar_list[i],
+                      Mdot=Mdot_list[i],
+                      Sigma=sigma,
+                      T=T)
     
-#     ax1 = ax[i]
-#     ax2 = ax1.twinx()
+    ax1 = ax[i]
+    ax2 = ax1.twinx()
     
-#     ax1.plot(r_grid, sigma, label = r'$\Sigma_{g}$')
-#     ax2.plot(r_grid, T, label = r'T', color = 'r')
-#     # ax1.scatter(r_grid, sigma)
-#     ax1.quiver(r_grid, sigma, -v, np.zeros(v.shape), v,
-#                cmap='rainbow')
+    ax1.plot(r_grid, sigma, label = r'$\Sigma_{g}$')
+    ax2.plot(r_grid, T, label = r'T', color = 'r')
+    # ax1.scatter(r_grid, sigma)
+    ax1.quiver(r_grid, sigma, -v, np.zeros(v.shape), v,
+               cmap='rainbow')
     
-#     ax1.set_title(name_list[i], fontsize = 16)
-#     ax1.set_xlim((0.1, 200))
-#     ax1.set_ylim((1e-6, 1e6))
-#     ax1.set_xscale('log')
-#     ax1.set_yscale('log')
+    ax1.set_title(name_list[i], fontsize = 16)
+    ax1.set_xlim((0.1, 200))
+    ax1.set_ylim((1e-6, 1e6))
+    ax1.set_xscale('log')
+    ax1.set_yscale('log')
     
-#     ax1.set_xlabel('R [AU]', fontsize = 16)
-#     ax1.set_ylabel(r'$\Sigma_{g} [g cm^{-2}]$', fontsize = 16)
-#     ax2.set_ylabel('T [K]', fontsize = 16)
-#     ax1.legend(fontsize = 16, loc='upper left')
-#     ax2.legend(fontsize = 16, loc='upper right')
+    ax1.set_xlabel('R [AU]', fontsize = 16)
+    ax1.set_ylabel(r'$\Sigma_{g} [g cm^{-2}]$', fontsize = 16)
+    ax2.set_ylabel('T [K]', fontsize = 16)
+    ax1.legend(fontsize = 16, loc='upper left')
+    ax2.legend(fontsize = 16, loc='upper right')
     
-# plt.tight_layout()
-# plt.savefig('profile.pdf', transparent = True)
-# plt.close()
+plt.tight_layout()
+plt.savefig('profile.pdf', transparent = True)
+plt.close()
 
 ###############################################################################
-# # alpha plot
-# fig, ax = plt.subplots(6, 4, figsize=(25, 30), sharex=True, sharey=True)
+# alpha plot
+fig, ax = plt.subplots(6, 4, figsize=(25, 30), sharex=True, sharey=True)
 
-# ax = ax.flatten()
+ax = ax.flatten()
 
-# for i in range(len(rc_list)):
-#     sigma = surface_density(rc = rc_list[i],
-#                             sigmac=sigmac_list[i],
-#                             delta_gas=deltag_list[i],
-#                             rcav=rcavg_list[i],
-#                             gamma=gamma_list[i])
-#     alpha_plot = alpha_profile(Mstar=Mstar_list[i],
-#                                Mdot=Mdot_list[i],
-#                                Sigma=sigma,
-#                                psi=psi_list[i],
-#                                Lstar=Lstar_list[i])
-#     ax1 = ax[i]
-#     ax2 = ax1.twinx()
+for i in range(len(rc_list)):
+    sigma = surface_density(rc = rc_list[i],
+                            sigmac=sigmac_list[i],
+                            delta_gas=deltag_list[i],
+                            rcav=rcavg_list[i],
+                            gamma=gamma_list[i])
+    alpha_plot = alpha_profile(Mstar=Mstar_list[i],
+                               Mdot=Mdot_list[i],
+                               Sigma=sigma,
+                               psi=psi_list[i],
+                               Lstar=Lstar_list[i])
+    ax1 = ax[i]
+    ax2 = ax1.twinx()
     
-#     ax1.plot(r_grid, sigma, label = r'$\Sigma_{g}$')
-#     ax2.plot(r_grid, alpha_plot, label = r'$\alpha$', color = 'r')
-#     ax2.plot(r_grid, 1e-2*np.ones(r_grid.shape),'r--')
-#     ax2.plot(r_grid, np.ones(r_grid.shape),'r:')
+    ax1.plot(r_grid, sigma, label = r'$\Sigma_{g}$')
+    ax2.plot(r_grid, alpha_plot, label = r'$\alpha$', color = 'r')
+    ax2.plot(r_grid, 1e-2*np.ones(r_grid.shape),'r:')
+    ax2.plot(r_grid, np.ones(r_grid.shape),'r--')
     
-#     ax1.set_title(name_list[i], fontsize = 16)
-#     ax1.set_xlim((0.1, 200))
-#     ax1.set_ylim((1e-6, 1e6))
-#     ax2.set_ylim((1e-4, 1e4))
-#     ax1.set_xscale('log')
-#     ax1.set_yscale('log')
-#     ax2.set_yscale('log')
+    ax1.set_title(name_list[i], fontsize = 16)
+    ax1.set_xlim((0.1, 200))
+    ax1.set_ylim((1e-6, 1e6))
+    ax2.set_ylim((1e-4, 1e4))
+    ax1.set_xscale('log')
+    ax1.set_yscale('log')
+    ax2.set_yscale('log')
     
     
-#     ax1.set_xlabel('R [AU]', fontsize = 16)
-#     ax1.set_ylabel(r'$\Sigma_{g} [g cm^{-2}]$', fontsize = 16)
-#     ax2.set_ylabel(r'$\alpha$', fontsize = 16)
-#     ax1.legend(fontsize = 16, loc='upper left')
-#     ax2.legend(fontsize = 16, loc='upper right')
+    ax1.set_xlabel('R [AU]', fontsize = 16)
+    ax1.set_ylabel(r'$\Sigma_{g} [g cm^{-2}]$', fontsize = 16)
+    ax2.set_ylabel(r'$\alpha$', fontsize = 16)
+    ax1.legend(fontsize = 16, loc='upper left')
+    ax2.legend(fontsize = 16, loc='upper right')
     
-# plt.tight_layout()
-# plt.savefig('alpha_profile.pdf', transparent = True)
-# plt.close()
+plt.tight_layout()
+plt.savefig('alpha_profile.pdf', transparent = True)
+plt.close()
 
 ###############################################################################
 # vr plot
-# fig, ax = plt.subplots(6, 4, figsize=(25, 30), sharex=True, sharey=True)
+fig, ax = plt.subplots(6, 4, figsize=(25, 30), sharex=True, sharey=True)
 
-# ax = ax.flatten()
+ax = ax.flatten()
 
-# for i in range(len(rc_list)):
-#     sigma = surface_density(rc = rc_list[i],
-#                             sigmac=sigmac_list[i],
-#                             delta_gas=deltag_list[i],
-#                             rcav=rcavg_list[i],
-#                             gamma=gamma_list[i])
-#     T = temperature(psi=psi_list[i],
-#                     Lstar=Lstar_list[i])
-#     _, vr_plot = vr_profile(Mstar=Mstar_list[i],
-#                             Mdot=Mdot_list[i],
-#                             Sigma=sigma,
-#                             T=T)
-#     ax1 = ax[i]
-#     ax2 = ax1.twinx()
+for i in range(len(rc_list)):
+    sigma = surface_density(rc = rc_list[i],
+                            sigmac=sigmac_list[i],
+                            delta_gas=deltag_list[i],
+                            rcav=rcavg_list[i],
+                            gamma=gamma_list[i])
+    T = temperature(psi=psi_list[i],
+                    Lstar=Lstar_list[i])
+    _, vr_plot = vr_profile(Mstar=Mstar_list[i],
+                            Mdot=Mdot_list[i],
+                            Sigma=sigma,
+                            T=T)
+    ax1 = ax[i]
+    ax2 = ax1.twinx()
     
-#     ax1.plot(r_grid, sigma, label = r'$\Sigma_{g}$')
-#     ax2.plot(r_grid, vr_plot, label = r'$v_{r}$', color = 'r')
+    ax1.plot(r_grid, sigma, label = r'$\Sigma_{g}$')
+    ax2.plot(r_grid, vr_plot, label = r'$v_{r}$', color = 'r')
 
-#     ax2.plot(r_grid, np.ones(r_grid.shape),'r:')
+    ax2.plot(r_grid, np.ones(r_grid.shape),'r:')
     
-#     ax1.set_title(name_list[i], fontsize = 16)
-#     ax1.set_xlim((0.1, 200))
-#     ax1.set_ylim((1e-6, 1e6))
-#     ax2.set_ylim((1e-6, 1e2))
-#     ax1.set_xscale('log')
-#     ax1.set_yscale('log')
-#     ax2.set_yscale('log')
+    ax1.set_title(name_list[i], fontsize = 16)
+    ax1.set_xlim((0.1, 200))
+    ax1.set_ylim((1e-6, 1e6))
+    ax2.set_ylim((1e-6, 1e2))
+    ax1.set_xscale('log')
+    ax1.set_yscale('log')
+    ax2.set_yscale('log')
     
     
-#     ax1.set_xlabel('R [AU]', fontsize = 16)
-#     ax1.set_ylabel(r'$\Sigma_{g} [g cm^{-2}]$', fontsize = 16)
-#     ax2.set_ylabel(r'$v_{r} [c_{s}]$', fontsize = 16)
-#     ax1.legend(fontsize = 16, loc='upper left')
-#     ax2.legend(fontsize = 16, loc='upper right')
+    ax1.set_xlabel('R [AU]', fontsize = 16)
+    ax1.set_ylabel(r'$\Sigma_{g} [g cm^{-2}]$', fontsize = 16)
+    ax2.set_ylabel(r'$v_{r} [c_{s}]$', fontsize = 16)
+    ax1.legend(fontsize = 16, loc='upper left')
+    ax2.legend(fontsize = 16, loc='upper right')
     
-# plt.tight_layout()
-# plt.savefig('vr_profile.pdf', transparent = True)
-# plt.close()
+plt.tight_layout()
+plt.savefig('vr_profile.pdf', transparent = True)
+plt.close()
 
 ###############################################################################
 # Bz plot
@@ -213,9 +213,7 @@ for i in range(len(rc_list)):
                             delta_gas=deltag_list[i],
                             rcav=rcavg_list[i],
                             gamma=gamma_list[i])
-    T = temperature(psi=psi_list[i],
-                    Lstar=Lstar_list[i])
-    
+
     if name_list[i] in without_cav:
         rc_list[i] = 100
         
@@ -255,4 +253,64 @@ for i in range(len(rc_list)):
     
 plt.tight_layout()
 plt.savefig('B_profile.pdf', transparent = True)
+plt.close()
+
+###############################################################################
+# alpha vs B
+fig, ax = plt.subplots(6, 4, figsize=(25, 30), sharex=True, sharey=True)
+
+ax = ax.flatten()
+
+for i in range(len(rc_list)):
+    sigma = surface_density(rc = rc_list[i],
+                            sigmac=sigmac_list[i],
+                            delta_gas=deltag_list[i],
+                            rcav=rcavg_list[i],
+                            gamma=gamma_list[i])
+    alpha_plot = alpha_profile(Mstar=Mstar_list[i],
+                               Mdot=Mdot_list[i],
+                               Sigma=sigma,
+                               psi=psi_list[i],
+                               Lstar=Lstar_list[i])
+    
+    
+    if name_list[i] in without_cav:
+        rc_list[i] = 100
+        
+    h_list = h(rc=rc_list[i],
+               hc=hc_list[i],
+               psi=psi_list[i])
+    H_list = h_list*r_grid*au
+    Bz_squre = Bz2(H=H_list,
+                   Mstar=Mstar_list[i],
+                   Sigma=sigma,
+                   deltag=deltag_list[i],
+                   rcav=rcavg_list[i])
+    BzBphi_profile = BzBphi(Mstar=Mstar_list[i],
+                            Mdot=Mdot_list[i])
+    
+    ax1 = ax[i]
+    ax2 = ax1.twinx()
+    
+    ax1.plot(r_grid, alpha_plot, label = r'$\alpha$')
+    ax2.plot(r_grid, np.sqrt(Bz_squre), 'r--', label = r'$\sqrt{B_{z}^{2}}$')
+    ax2.plot(r_grid, np.sqrt(BzBphi_profile), 'r:', label = r'$\sqrt{B_{z}B_{\phi}}$')
+    
+    ax1.set_title(name_list[i], fontsize = 16)
+    ax1.set_xlim((0.1, 200))
+    ax1.set_ylim((1e-5, 1e4))
+    ax2.set_ylim((1e-8, 1e4))
+    ax1.set_xscale('log')
+    ax1.set_yscale('log')
+    ax2.set_yscale('log')
+    
+    
+    ax1.set_xlabel('R [AU]', fontsize = 16)
+    ax1.set_ylabel(r'$\alpha$', fontsize = 16)
+    ax2.set_ylabel(r'$[G]$', fontsize = 16)
+    ax1.legend(fontsize = 16, loc='upper left')
+    ax2.legend(fontsize = 16, loc='upper right')
+    
+plt.tight_layout()
+plt.savefig('alpha_vs_B_profile.pdf', transparent = True)
 plt.close()
