@@ -8,7 +8,7 @@ import corner
 from itertools import combinations
 from cavity_data import *
 ###################################################################################################
-def plot_scatter(cavity_dict, fname='scatter.pdf'):
+def plot_all_scatter(cavity_dict, fname='scatter.pdf'):
     df = pd.DataFrame(cavity_dict)
 
     params = list(df.columns)
@@ -21,7 +21,9 @@ def plot_scatter(cavity_dict, fname='scatter.pdf'):
     params.remove('rcavd')
     params.remove('deltad')
     params.remove('gamma')
-    
+    params.remove('psi')
+    # params.remove('vr')
+    params.remove('hc')
     
     param_combinations = list(combinations(params, 2))
     num_combinations = len(param_combinations)
@@ -59,9 +61,15 @@ def plot_scatter(cavity_dict, fname='scatter.pdf'):
         # a, b = parameters
         # fitted_line = linear_model(np.log10(df[param1]), a, b)
         # ax.plot(df[param1], 10**(fitted_line))
+        try:
+            ax.set_xlabel(key_to_text[param1]+key_to_unit[param1], fontsize=25)
+        except:
+            ax.set_xlabel(key_to_text[param1], fontsize=25)
+        try:
+            ax.set_ylabel(key_to_text[param2]+key_to_unit[param2], fontsize=25)
+        except:
+            ax.set_ylabel(key_to_text[param2], fontsize=25)
         
-        ax.set_xlabel(key_to_text[param1], fontsize=25)
-        ax.set_ylabel(key_to_text[param2], fontsize=25)
         ax.set_title(f'{key_to_text[param1]} vs {key_to_text[param2]}', fontsize=25)
         ax.set_xscale('log')
         ax.set_yscale('log')
@@ -104,14 +112,80 @@ def plot_corner(cavity_dict, fname='corner.pdf'):
     figure.savefig(fname, transparent=True)
     plt.close()
 
+def plot_scatter(data_set=None, x_axis=None , y_axis=None,
+                              x_scale=None, y_scale=None,
+                              x_label=None, y_label=None,
+                              title=None  , fname=None):
+    if title is None: title = ''
+    if fname is None: fname = 'test.pdf'
+    
+    fig, ax = plt.subplots(figsize=(8, 8))
+    
+    
+
+    try:
+        x = data_set[x_axis]
+        y = data_set[y_axis]
+        print('Using the given data dictionary')
+    except:
+        x = x_axis
+        y = y_axis
+        print('Using the given data arrays')
+        if len(x) != len(y):
+            print('The two data arrays have different lengths')
+            print(f'The length of x-axis is {len(x)}')
+            print(f'The length of y-axis is {len(y)}')
+            return
+        
+    ax.scatter(x, y)
+    
+    try:
+        xlabel = key_to_text[x_axis] + key_to_unit[x_axis]
+        ylabel = key_to_text[y_axis] + key_to_unit[y_axis]
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+    except:
+        try:
+            xlabel = key_to_text[x_axis]
+            ylabel = key_to_text[y_axis]
+            ax.set_xlabel(xlabel)
+            ax.set_ylabel(ylabel)
+        except:
+            ax.set_xlabel(x_label)
+            ax.set_ylabel(y_label)
+        pass
+    
+    try:
+        ax.set_xscale(x_scale)
+    except:
+        ax.set_xscale('log')
+        print('x-axis is automatically set to be log scaling')
+    
+    try:
+        ax.set_yscale(y_scale)
+    except:
+        ax.set_yscale('log')
+        print('y-axis is automatically set to be log scaling')
+        
+    ax.set_title(title)
+    plt.tight_layout()
+    plt.savefig(fname, transparent = True)
+    return
+    
+
 ###################################################################################################
 # cavity = make_dict(target=with_companion+without_companion)
 cavity = make_dict(target=with_cav+without_cav)
-plot_scatter(cavity_dict=cavity, fname='scatter_raw.pdf')
+plot_all_scatter(cavity_dict=cavity, fname='scatter_raw.pdf')
 
 cavity = make_dict(target=with_companion)
-plot_scatter(cavity_dict=cavity, fname='scatter_companion.pdf')
+plot_all_scatter(cavity_dict=cavity, fname='scatter_companion.pdf')
 
 cavity = make_dict(target=without_companion)
-plot_scatter(cavity_dict=cavity, fname='scatter_nocompanion.pdf')
+plot_all_scatter(cavity_dict=cavity, fname='scatter_nocompanion.pdf')
+
+
+
+# cavity = make_dict(target=with_cav+without_cav)
+# plot_scatter(data_set=cavity, x_axis='Mdot', y_axis='Lstar', title='Mdot vs Lstar')
 
