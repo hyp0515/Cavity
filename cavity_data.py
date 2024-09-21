@@ -18,7 +18,7 @@ all_target = {
     'CQTau'     :[ 56,  2.5,   20,  1e-2,    10**(-7), 1.6,  8.9,   1158,   10,   20,  1e-2, 0.3, 0.05, 0.13],
     'DoAr44'    :[ 25,   60,   16,  1e-4,  10**(-8.3),   1,  1.5,    850,  1.9,   40,  1e-2, 1.0, 0.10, 0.10], # substellar companion
     'IRS48'     :[ 60,  0.5,   25,  1e-3,  10**(-8.4),   2,  1.5,    188, 17.8,   70,  1e-3, 1.0, 0.22, 0.14],
-    'TWHya'     :[ 35,   30,    4,  1e-2,  10**(-8.9), 0.6,    9,  16650, 0.28,    3,  1e-2, 1.0, 0.30, 0.10],
+    'TWHya'     :[ 35,   30,    4,  1e-2,  10**(-8.9), 0.6,   10,  16650, 0.28,    3,  1e-2, 1.0, 0.30, 0.10],
     'HD169142'  :[100,  6.5,   56, 0.025,  10**(-8.7),   2,    9,   2700,    8,   24,  0.27, 1.0, 0.01, 0.07], # ψ=0
     'Sz91'      :[ 75,    7,   50,  1e-5,  10**(-8.7), 0.5,  2.5,    300,  0.2,   67, 1e-20, 1.0, 0.30, 0.10],
     'J16083070' :[ 50,   39,   60,  1e-4,  10**(-9.1), 1.5,  2.5,   1000,  1.8,   62, 1e-20, 1.0, 0.10, 0.10],
@@ -69,6 +69,12 @@ def Bz2_at_1au(Mstar, Sigma, H):
 def BzBphi_at_1au(Mdot, Mstar):
     Omega = np.sqrt(G*Mstar*Msun/(au**3))
     return Mdot*(Msun/yr)*Omega/(2*au)
+
+def beta(Sigma, Mstar, H, Bz2):
+    Omega = np.sqrt(G*Mstar*Msun/((au)**3))
+    return (4*np.sqrt(2*np.pi)*H*(Omega**2)*Sigma)/Bz2
+
+
 
 def make_dict(target = with_cav + without_cav):
     
@@ -177,14 +183,14 @@ def make_dict(target = with_cav + without_cav):
             ))
         cavity_bzbphi.append(BzBphi_at_1au(Mdot=all_target[t][4],
                                            Mstar=all_target[t][5]))
-        
+
         
     cavity = {
         'name'      : target,
         'Mdot'      : cavity_mdot,
         'rc'        : cavity_rc,
         'sigmac'    : cavity_sigmac,
-        'rcavg'     : cavity_rcavg,
+        
         'rcavd'     : cavity_rcavd,
         'deltag'    : cavity_deltag,
         'deltad'    : cavity_deltad,
@@ -200,6 +206,7 @@ def make_dict(target = with_cav + without_cav):
         'psi'       : cavity_psi,
         'td'        : cavity_disk_life,
         'hc'        : cavity_hc,
+        'rcavg'     : cavity_rcavg,
         'bz2'       : cavity_bz2,
         'bzbphi'    : cavity_bzbphi
     }
@@ -217,13 +224,13 @@ key_to_text = {
     'age'    : r'$Age$',
     'Md'     : r'$M_{d}$',
     'Lstar'  : r'$L_{*}$',
-    'vr'     : r'$v_{r}$',
-    'alpha'  : r'$\alpha_{@1AU}$',
+    'vr'     : r'$v_{r}@1AU$',
+    'alpha'  : r'$\alpha@1AU$',
     'gamma'  : r'$\gamma$',
     'psi'    : r'$\psi$',
     'td'     : r'$t_{d}$',
-    'bz2'    : r'$B_{z}^{2}$',
-    'bzbphi' : r'$B_{z}B_{\phi}$'
+    'bz2'    : r'$B_{z}^{2}@1AU$',
+    'bzbphi' : r'$B_{z}B_{\phi}@1AU$'
 }
 
 key_to_unit = {

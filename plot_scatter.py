@@ -22,9 +22,11 @@ def plot_all_scatter(cavity_dict, fname='scatter.pdf'):
     params.remove('deltad')
     params.remove('gamma')
     params.remove('psi')
-    params.remove('vr')
+    # params.remove('vr')
     params.remove('hc')
     params.remove('td')
+    params.remove('bzbphi')
+    params.remove('bz2')
     
     param_combinations = list(combinations(params, 2))
     num_combinations = len(param_combinations)
@@ -57,6 +59,8 @@ def plot_all_scatter(cavity_dict, fname='scatter.pdf'):
             scatter = ax.scatter(df[param1][j], df[param2][j], s=150, c=color_value[j],
                                 cmap='rainbow', marker = marker_dict[status],
                                 vmin=color_value.min(), vmax=color_value.max())
+            # scatter = ax.scatter(df[param1][j], df[param2][j], s=150,
+            #                     cmap='red', marker = marker_dict[status],)
         
         # parameters, covariance = curve_fit(linear_model, np.log10(df[param1]), np.log10(df[param2]))
         # a, b = parameters
@@ -179,14 +183,15 @@ def plot_scatter(data_set=None, x_axis=None , y_axis=None,
 cavity = make_dict(target=with_cav+without_cav)
 plot_all_scatter(cavity_dict=cavity, fname='scatter_raw.pdf')
 
-cavity = make_dict(target=with_companion)
-plot_all_scatter(cavity_dict=cavity, fname='scatter_companion.pdf')
+# cavity = make_dict(target=with_companion)
+# plot_all_scatter(cavity_dict=cavity, fname='scatter_companion.pdf')
 
-cavity = make_dict(target=without_companion)
-plot_all_scatter(cavity_dict=cavity, fname='scatter_nocompanion.pdf')
+# cavity = make_dict(target=without_companion)
+# plot_all_scatter(cavity_dict=cavity, fname='scatter_nocompanion.pdf')
 
 
 
 # cavity = make_dict(target=with_cav+without_cav)
-# plot_scatter(data_set=cavity, x_axis='Mdot', y_axis='Lstar', title='Mdot vs Lstar')
+# plot_scatter(data_set=cavity, x_axis='age', y_axis='td',
+#              x_scale='linear',title='Mdot vs Lstar')
 
